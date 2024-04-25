@@ -29,6 +29,10 @@ async function run() {
     const database = client.db("myUsers").collection("myUser");
 
     // API
+    app.get('/', (req, res)=>{
+      res.send("This is home page");
+    })
+
     app.get('/user', async(req, res)=>{
         const cursor = database.find();
         const result = await cursor.toArray();
@@ -61,10 +65,6 @@ run().catch(console.dir);
 
 
 // MongoDB
-
-app.get('/', (req, res)=>{
-    res.send("This is home page");
-})
 
 app.listen(port, ()=>{
     console.log(`server is running at ${port}`)
