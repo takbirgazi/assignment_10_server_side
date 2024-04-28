@@ -1,12 +1,13 @@
-const express = require('express');
-const app = express();
-require('dotenv').config();
-const cors = require('cors');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const port = process.env.PORT || 5000;
-
-app.use(cors())
-app.use(express.json());
+const express = require('express')
+const app = express()
+require('dotenv').config()
+const cors = require('cors')
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
+const port = process.env.PORT || 5000
+app.use(cors({
+    origin: ["http://localhost:5173", "https://assignment-10-5fcf9.web.app"]
+  }))
+app.use(express.json())
 
 // MongoDB
 
@@ -27,12 +28,13 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
 
     const database = client.db('myusers');
     const user = database.collection('myusr');
     const tourists_spots = database.collection('tourists_spots');
+    const allspots = database.collection('allspots');
 
     app.get('/user', async(req, res)=>{
       const coffee = user.find();
@@ -54,6 +56,16 @@ async function run() {
       const query = {_id : new ObjectId(id)};
       const result = await tourists_spots.findOne(query);
       res.send(result);
+    })
+    app.get('/allspots',async(req, res)=>{
+      const allspot = allspots.find();
+      const spotall = await allspot.toArray();
+      res.send(spotall);
+    })
+    app.post('/allspots', async(req, res)=>{
+      const newspot = req.body;
+      const spotData = await allspots.insertOne(newspot);
+      res.send(spotData);
     })
 
     // Send a ping to confirm a successful connection
