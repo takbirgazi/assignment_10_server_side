@@ -9,14 +9,15 @@ const port = process.env.PORT || 5000
 //   }))
 app.use(express.json())
 app.use(cors())
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://assignment-10-5fcf9.web.app");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "https://assignment-10-5fcf9.web.app");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
 
 // MongoDB
 
@@ -79,6 +80,12 @@ async function run() {
     app.get('/allspots/:email', async (req, res)=>{
       const result = await allspots.find({your_email:req.params.email}).toArray();
       res.send(result);
+    })
+    app.get('/allspot/:id', async (req, res)=>{
+      const id = req.params.id;
+      const findId = {_id : new ObjectId(id)};
+      const details = await allspots.findOne(findId)
+      res.send(details);
     })
 
     // Send a ping to confirm a successful connection
