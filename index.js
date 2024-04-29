@@ -4,10 +4,19 @@ require('dotenv').config()
 const cors = require('cors')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
 const port = process.env.PORT || 5000
-app.use(cors({
-    origin: ["http://localhost:5173", "https://assignment-10-5fcf9.web.app"]
-  }))
+// app.use(cors({
+//     origin: ["http://localhost:5173", "https://assignment-10-5fcf9.web.app"]
+//   }))
 app.use(express.json())
+app.use(cors())
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 // MongoDB
 
