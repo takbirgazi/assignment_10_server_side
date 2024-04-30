@@ -93,6 +93,27 @@ async function run() {
       const result = await allspots.deleteOne(query);
       res.send(result);
     })
+    app.put('/allspot/:id', async (req, res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const options = {upsert: true};
+      const updateSpot = req.body;
+      const updateSpotInfo = {
+        $set: {
+            image: updateSpot.image,
+            tourists_spot_name: updateSpot.tourists_spot_name,
+            country_Name: updateSpot.country_Name,
+            average_cost: updateSpot.average_cost,
+            short_description: updateSpot.short_description,
+            seasonality: updateSpot.seasonality,
+            travel_time: updateSpot.travel_time,
+            totalVisitorsPerYear: updateSpot.totalVisitorsPerYear,
+            location: updateSpot.location,
+        }
+      }
+      const result = await allspots.updateOne(filter, updateSpotInfo, options);
+      res.send(result);
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
